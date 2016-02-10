@@ -4,7 +4,7 @@ Allows the ability to command devices, scenes and groups individually or per roo
 
 ###Steps to install Domoticz.py
 - Make sure the Domoticz server is running by going to the server IP,
-e.g. https://server_ip/ or http://server_ip:port/.
+e.g. `https://server_ip/` or `http://server_ip:port/`.
 - Add the Domoticz server url, username and password to `profile.yml`:
 ```
 domoticz:
