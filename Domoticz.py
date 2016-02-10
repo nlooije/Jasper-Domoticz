@@ -117,7 +117,7 @@ def handle(text, mic, profile):
             Returns:
             Result of get_json_obj() of type `command`
         """
-        return get_json_obj('command', '&param=' + param + arg)
+        return get_json_obj('command', '&param=%s%s' % (param, arg))
 
     def send_light_command(idx, cmd):
         """
@@ -128,7 +128,7 @@ def handle(text, mic, profile):
             cmd -- switch command ['on', 'off', 'toggle']
             
         """
-        send_command('switchlight', '&idx=' + idx + '&switchcmd=' + cmd.title())
+        send_command('switchlight', '&idx=%s&switchcmd=%s' % (idx, cmd.title()))
 
     def send_thermostat_command(idx, sp):
         """
@@ -139,7 +139,7 @@ def handle(text, mic, profile):
             sp -- new setpoint of thermostat
             
         """
-        send_command('setsetpoint', '&idx=' + idx + '&setpoint=' + sp)
+        send_command('setsetpoint', '&idx=%s&setpoint=%s' % (idx, sp))
 
     def send_scene_command(idx, cmd):
         """
@@ -152,7 +152,7 @@ def handle(text, mic, profile):
             idx -- index of scene/group to command
             cmd -- scene/group command ['on', 'off']
         """
-        send_command('switchscene', '&idx=' + idx + '&switchcmd=' + cmd.title())
+        send_command('switchscene', '&idx=%s&switchcmd=%s' % (idx, cmd.title()))
 
     def get_rooms(order='name', used='true'):
         """
@@ -165,7 +165,7 @@ def handle(text, mic, profile):
             Returns:
             List of all roomplans
         """
-        return get_json_obj('plans', '&order=' + order + '&used=' + used)
+        return get_json_obj('plans', '&order=%s&used=%s' % (order, used))
 
     def get_scenes():
         """
@@ -186,7 +186,7 @@ def handle(text, mic, profile):
             Returns:
             json data for device
         """
-        return get_json_obj('devices', '&rid=' + idx)
+        return get_json_obj('devices', '&rid=%s' % idx)
 
     def get_devices(filter='all', used='true', order='Name'):
         """
@@ -200,7 +200,7 @@ def handle(text, mic, profile):
             Returns:
             List of all devices
         """
-        return get_json_obj('devices', '&filter=' + filter + '&used=' + used + '&order=' + order)
+        return get_json_obj('devices', '&filter=%s&used=%s&order=%s' % (filter, used, order))
 
     def get_devices_in_room(idx, filter='all'):
         """
@@ -213,7 +213,7 @@ def handle(text, mic, profile):
             Returns:
             A list of all devices in room
         """
-        return send_command('getplandevices', '&idx=' + idx + '&filter=' + filter)
+        return send_command('getplandevices', '&idx=%s&filter=%s' % (idx, filter))
 
     def get_devices_in_scene(idx, filter='all'):
         """
@@ -226,7 +226,7 @@ def handle(text, mic, profile):
             Returns:
             A list of all devices in scene/group
         """
-        return send_command('getscenedevices', '&idx=' + idx + '&isscene=true' + '&filter=' + filter)
+        return send_command('getscenedevices', '&idx=%s&isscene=true&filter=%s' % (idx, filter))
 
     def get_lights():
         """
@@ -258,7 +258,7 @@ def handle(text, mic, profile):
         return thermostats
 
     def get_timers_in_scene(idx):
-        return get_json_obj('scenetimers', '&idx' + idx)
+        return get_json_obj('scenetimers', '&idx=%s' % idx)
 
     # Helper methods:
     def add_log_message(msg):
@@ -268,7 +268,7 @@ def handle(text, mic, profile):
             Arguments:
             msg -- string to add as message
         """
-        send_command('addlogmessage', '&message=' + msg)
+        send_command('addlogmessage', '&message=%s' % msg)
 
     def get_sunrise_sunset():
         """
@@ -313,34 +313,28 @@ def handle(text, mic, profile):
     # Methods used for testing/debugging:
     # currently not used directly but could be if desired
     def add_room(name):
-        send_command('addplan', '&name=' + name)
+        send_command('addplan', '&name=%s' % name)
 
     def delete_room(idx):
-        send_command('deleteplan', '&idx=' + idx)
+        send_command('deleteplan', '&idx=%s' % idx)
 
     def add_scene(name, group=False):
-        get_json_obj('addscene', '&name=' + name + '&scenetype=' + str(int(group)))
+        get_json_obj('addscene', '&name=%s&scenetype=%s' % (name, str(int(group))))
 
     def delete_scene(idx):
-        get_json_obj('deletescene', '&idx=' + idx)
+        get_json_obj('deletescene', '&idx=%s' % idx)
 
     def add_device_to_scene(devidx, idx, group=False, cmd='on', 
                             lvl='100', hue='0', ondelay='', offdelay=''):
         send_command('addscenedevice', 
-                     '&idx=' + idx + '&isscene=' + str(not group).lower() 
-                     + '&devidx=' + devidx + '&command=' + cmd.title() 
-                     + '&level=' + lvl + '&hue=' + hue + '&ondelay=' + ondelay 
-                     + '&offdelay=' + offdelay)
+                     '&idx=%s&isscene=%s&devidx=%s&command=%s&level=%s&hue=%s&ondelay=%s&offdelay=%s' % (idx, str(not group).lower(), devidx, cmd.title(), lvl, hue, ondelay, offdelay))
 
     def delete_device_from_scene(idx):
-        send_command('deletescenedevice', '&idx=' + idx)
+        send_command('deletescenedevice', '&idx=%s' % idx)
 
     def add_timer_to_scene(idx, timertype, cmd, date='', hour='', min='', randomness='', level='', days='', active='true'):
         send_command('addscenetimer', 
-                     '&idx=' + idx + '&active=' + active + '&timertype=' + timertype + 
-                     '&date=' + date + '&hour=' + hour + '&min=' + min + 
-                     '&randomness=' + randomness + '&command=' + cmd + 
-                     '&level=' + level + '&days=' + days)
+                     '&idx=%s&active=%s&timertype=%s&date=%s&hour=%s&min=%s&randomness=%s&command=%s&level=%s&days=%s' % (idx, active, timertype, date, hour, min, randomness, cmd, lvl, days))
 
     # To-do: possible to refactor all device calls?
     def handle_device(device):
@@ -366,8 +360,7 @@ def handle(text, mic, profile):
             idx = light['idx']
             type = light['idx'].lower() # `is` will fail as type is unicode type
             status = light['Status'].lower() # `is` will fail as type is unicode type
-            if DEBUG: print 'name: ' + name + ', idx: ' + idx + \
-                            ', type: ' + type + ', status: ' + status
+            if DEBUG: print 'name: %s, idx: %s, type: %s, status: %s' % (name, idx, type, status)
             for command in ['on', 'off', 'toggle']:
                 if command in text:
                     if command == status:
@@ -471,8 +464,7 @@ def handle(text, mic, profile):
             idx = scene['idx']
             type = scene['Type'].lower()
             status = scene['Status'].lower()
-            if DEBUG: print 'name: ' + scenename + ', idx: ' + idx + \
-                            ', type: ' + type + ', status: ' + status
+            if DEBUG: print 'name: %s, idx: %s, type: %s, status: %s' % (scenename, idx, type, status)
             for command in ['on', 'off', 'activate', 'deactivate']:
                 if command in text:
                     if type == 'scene': 
@@ -529,15 +521,13 @@ def handle(text, mic, profile):
         if roomname in text:
             idx = room['idx']
             devices = get_devices_in_room(idx)
-            if DEBUG: print 'roomname: ' + roomname + ', idx: ' + idx + \
-                            ', no. of devices in room: ' + len(devices)
+            if DEBUG: print 'roomname: %s, idx: %s, no. of devices in room: %s' % (roomname, idx, len(devices))
             for device in devices:
                 devname = device['Name'].lower()
                 if devname in text:
                     idx = device['idx'].lower()
                     status = device['Status'].lower()
-                    if DEBUG: print 'devname: ' + devname + ', idx: ' + idx + \
-                                    ', status: ' + status
+                    if DEBUG: print 'devname: %s, idx: %s, status: %s' % (devname, idx, status)
                     for command in ['on', 'off', 'toggle']:
                         if command in text:
                             if command == status:
