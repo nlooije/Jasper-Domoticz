@@ -483,11 +483,8 @@ def handle(text, mic, profile):
                             return 'I can only activate scenes.'
                     elif type == 'group':
                         command = 'on' if command in ['on', 'activate'] else 'off' 
-                        if command == status:
-                            return 'The %s %s is already %s' % (scenename, type, command)
-                        else:
-                            send_scene_command(idx, command)
-                            return 'Switching %s the %s %s' % (command, scenename, type)
+                        send_scene_command(idx, command)
+                        return 'Switching %s the %s %s' % (command, scenename, type)
                     else:
                         return 'I cannot control %s types' % type
             return 'I cannot execute that %s command' % type
