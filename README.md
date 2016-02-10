@@ -3,12 +3,12 @@ Domoticz Module for JASPER.
 Allows the ability to command devices, scenes and groups individually or per roomplan through the Domoticz JSON API.
 
 ###Steps to install Domoticz.py
-- Make sure the Domoticz server is running by going to the server IP,
+- Make sure the Domoticz server is running by going to the `server_url`,
 e.g. `https://server_ip/` or `http://server_ip:port/`.
 - Add the Domoticz server url, username and password to `profile.yml`:
 ```
 domoticz:
-  server: <server>
+  server: <server_url>
   username: <username>
   password: <password>
 ```
