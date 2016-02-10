@@ -1,6 +1,6 @@
 #Jasper-Domoticz
-Domoticz Module for JASPER. 
-Allows the ability to command devices, scenes and groups individually or per roomplan through the Domoticz JSON API.
+[Domoticz](https://domoticz.com/) home automation module for [Jasper](http://jasperproject.github.io/).
+Allows the ability to command devices, scenes and groups individually or per roomplan through the Domoticz JSON [API](https://www.domoticz.com/wiki/Domoticz_API/JSON_URL's).
 
 ###Steps to install Domoticz.py
 - Make sure the Domoticz server is running by going to the `server_url`,
@@ -39,10 +39,12 @@ YOU: Increase the temperature
 JASPER: Increasing the temperature to 20.3
 ```
 
-##Todo:
-- [] improve performance of json calls to Domoticz
-- [] refactor to generalize device calls
-- [] refactor thermostat calls
+##To-do:
+- [ ] write unittests
+- [ ] implement other devices
+- [ ] improve performance of json calls to Domoticz
+- [ ] refactor to generalize device calls
+- [ ] refactor thermostat calls
 
 ##Contributions from the following people:
 ```
