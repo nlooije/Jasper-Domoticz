@@ -90,7 +90,7 @@ def handle(text, mic, profile):
         if DEBUG: print url
         obj = json.loads(send_request(url))
         if not is_status_ok(obj):
-            raise RunTimeError('Object not retrieved from Domoticz')
+            raise RuntimeError('Object not retrieved from Domoticz')
         if 'result' in obj:
             return obj['result']
 
