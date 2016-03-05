@@ -12,6 +12,10 @@ domoticz:
   username: <username>
   password: <password>
 ```
+- install python requirements:
+```
+sudo pip install word2number
+```
 - Download Domoticz.py:
 ```
 cd <path to jasper/client/modules>
