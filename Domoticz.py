@@ -6,10 +6,12 @@ import urllib2
 import json
 import base64
 
+from word2number import w2n
+
 DEBUG = False
 
 WORDS = [
-    "LIGHT", "LIGHTS",
+    "LIGHT", "LIGHTS", "DIMMER",
     "THERMOSTAT", "TEMPERATURE", "HUMIDITY", 
     "SCENE", "GROUP", "ROOM", "MODE"
 ]
@@ -119,16 +121,23 @@ def handle(text, mic, profile):
         """
         return get_json_obj('command', '&param=%s%s' % (param, arg))
 
-    def send_light_command(idx, cmd):
+    def send_light_command(idx, cmd, lvl=None):
         """
             Send a light command to the Domoticz server
 
             Arguments:
             idx -- index of light to command
-            cmd -- switch command ['on', 'off', 'toggle']
-            
+            cmd -- switch command ['on', 'off', 'toggle', 'dim']
+            lvl -- dimmer percentage (0-100)
         """
-        send_command('switchlight', '&idx=%s&switchcmd=%s' % (idx, cmd.title()))
+        arg = '&idx=%s&switchcmd=%s'
+        if cmd == 'dim':
+            lvl = 15*lvl/100+1 # 
+            set = 'Set%%20Level&level=%s' % lvl
+            arg = arg % (idx, set)
+        else:
+            arg = arg % (idx, cmd.title())
+        send_command('switchlight', arg)
 
     def send_thermostat_command(idx, sp):
         """
@@ -278,7 +287,23 @@ def handle(text, mic, profile):
             Dictionary of sun-rise/set times
         """
         return send_command('getSunRiseSet', '')
-        
+
+    def get_number_from_words(words):
+        """
+            Retrieves numerals from spoken words
+            using `word2number` package
+            
+            Currently cannot handle more than one number
+            
+            Returns:
+            First number found in list `words`
+        """
+        for t in words:
+            try:
+                return w2n.word_to_num(t)
+            except IndexError:
+                pass
+
     def jsonprettyprint(obj):
         """
             Formats json object into human-readable print
@@ -346,11 +371,12 @@ def handle(text, mic, profile):
     def handle_light(light):
         """
             Contains the logic to handle light switches.
-            Switches can be `on`, `off`, or `toggled`.
+            Switches can be `on`, `off`, `toggled` or 'dim'.
             
             Usage: 
             'Turn on/off the test light'
             'Toggle the test light'
+            'Set test light to fifty percent'
 
             Returns:
             The result of a `light` command issued to Domoticz through Jasper
@@ -360,17 +386,22 @@ def handle(text, mic, profile):
             idx = light['idx']
             type = light['idx'].lower() # `is` will fail as type is unicode type
             status = light['Status'].lower() # `is` will fail as type is unicode type
-            if DEBUG: print 'name: %s, idx: %s, type: %s, status: %s' % (name, idx, type, status)
-            for command in ['on', 'off', 'toggle']:
+            if DEBUG: print 'idx: %s, type: %s, status: %s' % (idx, type, status)
+            for command in ['on', 'off', 'toggle', 'percent']:
                 if command in text:
                     if command == status:
                         return "The %s light is already %s" % (lightname, command)
                     else:
-                        send_light_command(idx, command)
-                        if command is 'toggle':
-                            return 'Toggling light'
+                        if command == 'percent':
+                             lvl = get_number_from_words(text)
+                             send_light_command(idx, 'dim', lvl)
+                             return 'Setting to %s percent' % lvl
                         else:
-                            return 'Turning %s light %s' % (lightname, command)
+                            send_light_command(idx, command)
+                            if command is 'toggle':
+                                return 'Toggling light'
+                            else:
+                                return 'Turning %s light %s' % (lightname, command)
             return 'I cannot execute that %s command' % type
         return None
 
@@ -560,7 +591,7 @@ def handle(text, mic, profile):
         response = handle_rooms()
     elif any(word in text for word in ["scene", "group", "mode"]):
         response = handle_scenes()
-    elif any(word in text for word in ["light", "lights"]):
+    elif any(word in text for word in ["light", "lights", "dimmer"]):
         response = handle_lights()
     elif any(word in text for word in ["temperature", "humidity", "thermostat"]):
         response = handle_thermostats()
@@ -575,4 +606,4 @@ def isValid(text):
         Arguments:
         text -- user-input, typically transcribed speech
     """
-    return bool(re.search(r'\b(room|scene|group|mode|light|thermostat|temperature|humidity)\b', text, re.IGNORECASE))
+    return bool(re.search(r'\b(room|scene|group|mode|light|dimmer|thermostat|temperature|humidity)\b', text, re.IGNORECASE))
