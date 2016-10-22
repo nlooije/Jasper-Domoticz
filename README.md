@@ -14,8 +14,8 @@ domoticz:
 ```
 - Download Domoticz.py:
 ```
-cd <path to jasper/client/modules>
-git clone https://github.com/nlooije/Jasper-Domoticz.git .
+cd <path to jasper/plugins/speechhandler>
+git clone https://github.com/nlooije/Jasper-Domoticz.git ./domoticz
 ```
 You have installed the Domoticz module for jasper!
 
@@ -40,6 +40,7 @@ JASPER: Increasing the temperature to 20.3
 ```
 
 ##To-do:
+- [x] update for new plugin system
 - [ ] write unittests
 - [ ] implement other devices
 - [ ] improve performance of json calls to Domoticz
