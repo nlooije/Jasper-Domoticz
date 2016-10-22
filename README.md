@@ -15,7 +15,7 @@ domoticz:
 - Download Jasper-Domoticz:
 ```
 cd <path to jasper/client/modules>
-git clone https://github.com/nlooije/Jasper-Domoticz.git .
+git clone https://github.com/nlooije/Jasper-Domoticz.git ./domoticz
 ```
 You have installed the Domoticz module for Jasper!
 
