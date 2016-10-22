@@ -2,7 +2,7 @@
 [Domoticz](https://domoticz.com/) home automation module for [Jasper](http://jasperproject.github.io/).
 Allows the ability to command devices, scenes and groups individually or per roomplan through the Domoticz JSON [API](https://www.domoticz.com/wiki/Domoticz_API/JSON_URL's).
 
-###Steps to install Domoticz.py
+###Steps to install Jasper-Domoticz:`
 - Make sure the Domoticz server is running by going to the `server_url`,
 e.g. `https://server_ip` or `http://server_ip:port`.
 - Add the Domoticz server url, username and password to `profile.yml`:
@@ -12,12 +12,12 @@ domoticz:
   username: <username>
   password: <password>
 ```
-- Download Domoticz.py:
+- Download Jasper-Domoticz:
 ```
 cd <path to jasper/plugins/speechhandler>
-git clone https://github.com/nlooije/Jasper-Domoticz.git ./domoticz
+git clone https://github.com/nlooije/Jasper-Domoticz.git --branch dev-plugins ./domoticz
 ```
-You have installed the Domoticz module for jasper!
+You have installed the Domoticz module for Jasper!
 
 ###Usage:
 Assuming a dinnertable light, a movie scene, a night group and
@@ -40,7 +40,7 @@ JASPER: Increasing the temperature to 20.3
 ```
 
 ##To-do:
-- [x] update for new plugin system
+- [x] update to new plugin system
 - [ ] write unittests
 - [ ] implement other devices
 - [ ] improve performance of json calls to Domoticz
